@@ -7,7 +7,7 @@ export function toast (message, type = 'success') {
     // 非2xx，服务端发来的信息存放在err.response.data中。如果是网络问题，那么err.response.data是undefined。
     message,
     type,
-    duration: 2000
+    duration: 1500
   })
 }
 

@@ -1,5 +1,6 @@
 <template>
   <div>
+    标签导航
   </div>
 </template>
 
@@ -7,4 +8,6 @@
 
 </script>
 
-<style lang="less" scoped></style>
+<style lang="scss" scoped>
+
+</style>

@@ -21,3 +21,11 @@ export function logout () {
     method: 'post',
   })
 }
+
+export function updatePassword (data) {
+  return axios({
+    url: '/admin/updatepassword',
+    method: 'post',
+    data
+  })
+}
