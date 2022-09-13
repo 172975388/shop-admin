@@ -1,11 +1,18 @@
 import router from '~/router/index'
+import { addRoutes } from '~/router/index'
 import { toast, showFullLoading, hideFullLoading } from '~/composables/util'
 import store from '~/store'
+
+let isNecessaryRoute = true
 
 router.beforeEach(async (to, from) => {
   showFullLoading()
 
   const token = store.state.token
+
+  // 路由表中的meta。
+  const title = to.meta.title || ''
+  document.title = title
 
   // && 防止死循环
   if (!token && to.path !== '/login') {
@@ -17,16 +24,21 @@ router.beforeEach(async (to, from) => {
     return from.path
   }
   if (token) {
-    // 如果用户登录了，自动获取用户信息，并存储在vuex当中
-    await store.dispatch('getUserInfo')
-    // 放行即可。不需要return 或者 return true
-  }
-  
-  // 路由表中的meta。
-  const title = to.meta.title || ''
-  document.title = title
+    // 如果用户登录了，每访问一个页面都自动获取用户信息，并存储在vuex当中
+    // 我觉得先去vuex中判断user信息是否存在，存在就别发请求了。比较好
+    const { menus } = await store.dispatch('getUserInfo')
+    // 动态添加路由
+    if (isNecessaryRoute) {
+      addRoutes(menus)
+      // 修改为false，不然无限重定向
+      isNecessaryRoute = false
+      // 触发重定向
+      // 刷新页面，跳转到404。需要重定向到该url。
+      return to.fullPath
+    }
 
-  // 放行即可。不需要return 或者 return true
+    // console.log(router.getRoutes())  查看注册的路由
+  }
 })
 
 router.afterEach(() => {

@@ -9,7 +9,9 @@ const store = createStore({
       user: {},
       // token存储在vuex中是为了速度。
       // 对于token的操作逻辑都应该放在vuex中。login接口用于获取token，所以不应该在登录组件中发起login请求，而是把login封装到vuex中。
-      token: getToken()
+      token: getToken(),
+      // 侧边栏宽度
+      asideWidth: '250px'
     }
   },
   mutations: {
@@ -27,12 +29,18 @@ const store = createStore({
     removeToken (state) {
       state.token = ''
       removeToken()
+    },
+    // 展开/折叠 侧边栏
+    handleAsideWidth (state) {
+      state.asideWidth = state.asideWidth === '250px' ? '64px' : '250px'
     }
   },
   actions: {
     async getUserInfo (context) {
       const res = await getUserInfo()
       context.commit('setUserInfo', res)
+
+      return res
     },
     async login (context, form) {
       const { token } = await login(form)
