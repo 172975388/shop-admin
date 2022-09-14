@@ -1,6 +1,9 @@
 <template>
   <div class="f-menu" :style="{ width: $store.state.asideWidth }">
-    <!-- el-menu 菜单容器 -->
+    <!-- 
+      el-menu 菜单容器
+      router为true，则以 el-menu-item 的 index 作为 path 进行路由跳转 
+     -->
     <el-menu
       class="border-0"
       :router="true"
@@ -43,12 +46,23 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 
 const store = useStore()
 const route = useRoute()
 
 const defaultActive = ref(route.path)
+
+/**
+ * defaultActive决定menu项的激活状态，
+ * FTagList中的activeTab决定tag的激活状态。
+ * 二者的值都是route.path
+ * 但是点击menu，不会引发activeTab改变，同理activeTab也不会引发defaultActive的改变。。搞不懂为什么
+ * 只能每个都监听onBeforeRouteUpdate，每次改变路由时都手动把两个值修改。
+ */
+onBeforeRouteUpdate(to => {
+  defaultActive.value = to.path
+})
 
 // 是否折叠
 const isCollapse = computed(() => store.state.asideWidth === '64px')
@@ -62,6 +76,6 @@ const menus = store.state.user.menus
   &::-webkit-scrollbar {
     display: none;
   }
-  scrollbar-width: none
+  scrollbar-width: none;
 }
 </style>

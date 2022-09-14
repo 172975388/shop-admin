@@ -23,7 +23,9 @@ router.beforeEach(async (to, from) => {
     // 取消导航
     return from.path
   }
-  if (token) {
+
+  // 获取一次用户数据即可。刷新页面则重新运行代码，isNecessaryRoute为true，重新请求user信息
+  if (token && isNecessaryRoute) {
     // 如果用户登录了，每访问一个页面都自动获取用户信息，并存储在vuex当中
     // 我觉得先去vuex中判断user信息是否存在，存在就别发请求了。比较好
     const { menus } = await store.dispatch('getUserInfo')
