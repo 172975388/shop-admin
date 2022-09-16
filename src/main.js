@@ -14,6 +14,8 @@ import 'nprogress/nprogress.css'
 
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
+import permission from '~/directives/permission'
+
 // createApp(App) 实例化vue   .use返回实例，所以可以链式调用
 const app = createApp(App)
 
@@ -26,4 +28,5 @@ app
   .use(ElementPlus)
   .use(router)
   .use(store)
+  .use(permission)
   .mount('#app')

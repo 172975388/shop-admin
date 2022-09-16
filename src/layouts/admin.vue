@@ -10,7 +10,7 @@
       <!-- 
         f-tag-list是固定定位，所以给父级添加padding-top，不让f-tag-list压住下面的盒子
        -->
-      <el-main class="pt-44px">
+      <el-main class="pt-64px">
         <f-tag-list></f-tag-list>
         <!-- vue-router v4语法 https://router.vuejs.org/zh/guide/migration/index.html#router-view-%E3%80%81-keep-alive-%E5%92%8C-transition -->
         <router-view v-slot="{ Component }">
@@ -47,7 +47,11 @@ import 'animate.css'
     查看源码可得.animate__animated设置了animation-duration: 1s; 所以给进入的动画类设置delay 1s。让离开的动画先执行完。
     查看文档可知有预定义延迟类。这里就直接自己写了。
   */
-  animation-delay: 1s ;
+  animation-delay: 0.2s;
+}
+
+.animate__animated {
+  animation-duration: 0.2s;
 }
 
 /**

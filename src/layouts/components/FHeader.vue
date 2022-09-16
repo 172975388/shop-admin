@@ -100,7 +100,7 @@ function handleCommand(command) {
 
 <style lang="scss" scoped>
 .f-header {
-  @apply flex justify-between bg-indigo-700 text-light-50 fixed top-0 left-0 right-0 h-64px items-center;
+  @apply flex justify-between bg-indigo-700 text-light-50 fixed top-0 left-0 right-0 h-64px items-center z-1;
 
   .left {
     @apply flex items-center justify-center;
