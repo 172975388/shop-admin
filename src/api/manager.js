@@ -11,14 +11,14 @@ export function login (data) {
 export function getUserInfo () {
   return axios({
     url: '/admin/getinfo',
-    method: 'post',
+    method: 'post'
   })
 }
 
 export function logout () {
   return axios({
     url: '/admin/logout',
-    method: 'post',
+    method: 'post'
   })
 }
 

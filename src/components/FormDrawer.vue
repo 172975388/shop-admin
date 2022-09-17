@@ -23,10 +23,10 @@
 import { ref } from 'vue'
 
 const showDrawer = ref(false)
+const loading = ref(false)
+
 const open = () => (showDrawer.value = true)
 const close = () => (showDrawer.value = false)
-
-const loading = ref(false)
 const showLoading = () => {
   loading.value = true
 }
@@ -44,6 +44,7 @@ defineExpose({
 const emit = defineEmits(['submit'])
 
 const submit = () => {
+  // 提交时需要ajax请求，具体是什么请求，发送什么参数，由父组件决定。
   emit('submit')
 }
 
