@@ -24,7 +24,8 @@
       @confirm="$emit('delete')"
     >
       <template #reference>
-        <el-button type="primary" size="small" text class="px-1">
+        <!-- 父组件监听了click事件，这里要禁止传播。 -->
+        <el-button type="primary" size="small" text class="px-1" @click.stop="">
           <el-icon :size="16"><Close /></el-icon>
         </el-button>
       </template>

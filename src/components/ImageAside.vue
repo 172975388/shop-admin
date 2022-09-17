@@ -119,8 +119,12 @@ const drawerTitle = ref('')
 
 // 创建图片分类
 const handleCreate = () => {
-  ruleForm.name = ''
-  ruleForm.order = 50
+  if (ruleFormRef.value.resetFields) {
+    // 首次ruleFormRef.value是{}     resetFields 清除验证，重置数据。但数据如果是修改数据回填，重置也会被填上。。
+    ruleFormRef.value.resetFields()
+    Object.keys(ruleForm).forEach(key=>{ruleForm[key]=''})
+    ruleForm.order = 50
+  }
   drawerTitle.value = '新增'
   formDrawerRef.value.open()
 }
@@ -129,7 +133,7 @@ defineExpose({
   handleCreate
 })
 
-const ruleFormRef = ref()
+const ruleFormRef = ref({})
 const ruleForm = reactive({
   name: '',
   order: 50
@@ -154,7 +158,8 @@ async function handleSubmit (ruleFormRef) {
         }
 
         toast(drawerTitle.value + '成功')
-        getData(drawerTitle.value === '新增' ? currentPage.value : 1)
+        currentPage.value = drawerTitle.value === '新增' ? 1 : currentPage.value
+        getData()
         formDrawerRef.value.close()
       } finally {
         formDrawerRef.value.hideLoading()
