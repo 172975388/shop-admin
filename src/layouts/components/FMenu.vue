@@ -57,7 +57,8 @@ const defaultActive = ref(route.path)
  * defaultActive决定menu项的激活状态，
  * FTagList中的activeTab决定tag的激活状态。
  * 二者的值都是route.path
- * 但是点击menu，不会引发activeTab改变，同理activeTab也不会引发defaultActive的改变。。搞不懂为什么
+ * 但是点击menu，不会引发activeTab改变，同理activeTab也不会引发defaultActive的改变。。
+ *  因为，defaultActive代理的是route.path，route.path是字符串。defaultActive代理的是字符串，route.path后续的变化不会影响该字符串的值。
  * 只能每个都监听onBeforeRouteUpdate，每次改变路由时都手动把两个值修改。
  */
 onBeforeRouteUpdate(to => {

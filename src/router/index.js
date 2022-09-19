@@ -14,6 +14,7 @@ import NoticeList from '~/pages/notice/list.vue'
 import SettingBase from '~/pages/setting/base.vue'
 import CouponList from '~/pages/coupon/list.vue'
 import ManagerList from '~/pages/manager/list.vue'
+import AccessList from '~/pages/access/list.vue'
 
 /* const routes = [
   {
@@ -167,7 +168,15 @@ const asyncRoutes = [
     name: 'ManagerList',
     component: ManagerList,
     meta: {
-      title: '管理员列表'
+      title: '管理员管理'
+    }
+  },
+  {
+    path: '/access/list',
+    name: 'AccessList',
+    component: AccessList,
+    meta: {
+      title: '菜单权限管理'
     }
   }
 ]

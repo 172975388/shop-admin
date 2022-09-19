@@ -2,16 +2,7 @@
   <div>
     <el-card shadow="never" class="card-wrapper">
       <template #header>
-        <div class="header">
-          <el-button type="primary" size="small" @click="handleCreate"
-            >新增</el-button
-          >
-          <el-tooltip effect="dark" content="刷新" placement="bottom">
-            <el-icon class="icon-button" @click="getData" :size="20">
-              <Refresh />
-            </el-icon>
-          </el-tooltip>
-        </div>
+        <ListHeader @create="handleCreate" @refresh="getData" />
       </template>
       <!-- card body -->
       <el-table
@@ -91,15 +82,14 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch } from 'vue'
 import {
   getNoticeList,
   updateNotice,
   createNotice,
   deleteNotice
 } from '~/api/notice'
+import ListHeader from '~/components/ListHeader.vue'
 import FormDrawer from '~/components/FormDrawer.vue'
-import { toast } from '~/composables/util'
 import { useInitTable, useInitForm } from '~/composables/useCommon'
 
 const {
@@ -145,9 +135,6 @@ const {
 <style lang="scss" scoped>
 .card-wrapper {
   @apply border-0;
-  .header {
-    @apply flex justify-between items-center mb-4;
-  }
   .page {
     @apply flex justify-center items-center mt-5;
   }

@@ -20,16 +20,7 @@
         </el-form>
 
         <!-- 新增/刷新 -->
-        <div class="header-bottom">
-          <el-button type="primary" size="small" @click="handleCreate"
-            >新增</el-button
-          >
-          <el-tooltip effect="dark" content="刷新" placement="bottom">
-            <el-icon class="icon-button" @click="getData" :size="20">
-              <Refresh />
-            </el-icon>
-          </el-tooltip>
-        </div>
+        <ListHeader @create="handleCreate" @refresh="getData" />
       </div>
 
       <!-- table -->
@@ -172,6 +163,7 @@
 <script setup>
 import { ref } from 'vue'
 
+import ListHeader from '~/components/ListHeader.vue'
 import FormDrawer from '~/components/FormDrawer.vue'
 import ChooseImage from '~/components/ChooseImage.vue'
 
@@ -247,9 +239,7 @@ const {
 <style lang="scss" scoped>
 .card-wrapper {
   @apply border-0;
-  .header-bottom {
-    @apply flex justify-between items-center mb-4;
-  }
+  
   .searchForm {
     @apply flex justify-between mb-3;
   }

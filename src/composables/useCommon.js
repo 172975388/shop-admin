@@ -111,8 +111,6 @@ export function useInitForm (opt = {}) {
 
   if (opt.rules)
     Object.keys(opt.rules).forEach(key => (rules[key] = opt.rules[key]))
-  console.log(opt.rules)
-  console.log(rules)
 
   const resetSearchForm = defaultForm => {
     Object.keys(defaultForm).forEach(key => {
