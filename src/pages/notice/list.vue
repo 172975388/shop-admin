@@ -100,110 +100,46 @@ import {
 } from '~/api/notice'
 import FormDrawer from '~/components/FormDrawer.vue'
 import { toast } from '~/composables/util'
+import { useInitTable, useInitForm } from '~/composables/useCommon'
 
-const loading = ref(false)
-// 数据数量
-const total = ref(0)
-// 当前页
-const currentPage = ref(1)
-// 每页显示多少条
-const limit = ref(10)
-
-const tableData = ref([])
-
-async function getData () {
-  try {
-    loading.value = true
-    const res = await getNoticeList(currentPage.value)
-    tableData.value = res.list || []
-    total.value = res.totalCount
-  } finally {
-    loading.value = false
-  }
-}
-
-getData()
-
-watch(currentPage, () => {
-  getData()
+const {
+  tableData,
+  loading,
+  currentPage,
+  total,
+  limit,
+  getData,
+  handleDelete
+} = useInitTable({
+  getList: getNoticeList,
+  delete: deleteNotice
 })
 
-const handleDelete = async id => {
-  try {
-    loading.value = true
-    await deleteNotice(id)
-    getData()
-    toast('删除成功')
-  } catch {
-    toast('删除失败')
-  } finally {
-    loading.value = false
+/**
+ * rules本来就要在这个文件下定义，但是放在了别的文件，这就提示了需要这个rules数据。
+ */
+const {
+  formDrawerRef,
+  ruleFormRef,
+  ruleForm,
+  rules,
+  drawerTitle,
+  handleCreate,
+  handleUpdate,
+  handleSubmit
+} = useInitForm({
+  getData,
+  create: createNotice,
+  update: updateNotice,
+  ruleForm: {
+    title: '',
+    content: ''
+  },
+  rules: {
+    title: [{ required: true, message: '公告标题不能为空', trigger: 'blur' }],
+    content: [{ required: true, message: '公告内容不能为空', trigger: 'blur' }]
   }
-}
-
-const updateId = ref(0)
-
-// 可以和创建的方法结合成一个。
-const handleUpdate = async row => {
-  drawerTitle.value = '修改'
-  if (ruleFormRef.value.clearValidate) {
-    // 清除验证
-    ruleFormRef.value.clearValidate()
-  }
-  // 可以for
-  updateId.value = row.id
-  ruleForm.title = row.title
-  ruleForm.content = row.content
-  formDrawerRef.value.open()
-}
-
-const formDrawerRef = ref(null)
-const drawerTitle = ref('')
-
-const rules = reactive({
-  title: [{ required: true, message: '公告标题不能为空', trigger: 'blur' }],
-  content: [{ required: true, message: '公告内容不能为空', trigger: 'blur' }]
 })
-const ruleFormRef = ref({})
-
-const ruleForm = reactive({
-  title: '',
-  content: ''
-})
-
-const handleCreate = () => {
-  drawerTitle.value = '新增'
-  // 只能手动赋值，可以简化。
-  // ruleForm.title = ''
-  // ruleForm.content = ''
-  Object.keys(ruleForm).forEach(key=>{ruleForm[key]=''})
-  formDrawerRef.value.open()
-}
-
-async function handleSubmit (ruleFormRef) {
-  if (!ruleFormRef) return
-  await ruleFormRef.validate(async valid => {
-    if (valid) {
-      try {
-        formDrawerRef.value.showLoading()
-        if (drawerTitle.value === '新增') {
-          await createNotice(ruleForm)
-        } else {
-          await updateNotice(updateId.value, ruleForm)
-        }
-
-        toast(drawerTitle.value + '成功')
-        currentPage.value = drawerTitle.value === '新增' ? 1 : currentPage.value
-        getData()
-        formDrawerRef.value.close()
-      } finally {
-        formDrawerRef.value.hideLoading()
-      }
-    } else {
-      console.log('error submit!')
-    }
-  })
-}
 </script>
 
 <style lang="scss" scoped>

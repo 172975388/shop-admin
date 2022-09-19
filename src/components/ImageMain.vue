@@ -3,7 +3,12 @@
     <div class="main-list">
       <el-row :gutter="10">
         <el-col :span="6" v-for="(item, index) in list" :key="index">
-          <el-card shadow="hover" :body-style="{ padding: 0 }" class="card">
+          <el-card
+            shadow="hover"
+            :body-style="{ padding: 0 }"
+            class="card"
+            :class="{ 'border-blue-500': item.checked }"
+          >
             <el-image
               :src="item.url"
               fit="cover"
@@ -15,6 +20,12 @@
               {{ item.name }}
             </div>
             <div class="btn">
+              <el-checkbox
+                v-if="showCheckbox"
+                v-model="item.checked"
+                size="large"
+                @change="handleChooseChange(item)"
+              />
               <el-button
                 type="primary"
                 size="small"
@@ -57,7 +68,7 @@
     size="30%"
     :show-close="true"
   >
-  <UploadFile :id="image_class_id" @upload-done="uploadDone"></UploadFile>
+    <UploadFile :id="image_class_id" @upload-done="uploadDone"></UploadFile>
   </el-drawer>
 </template>
 
@@ -67,6 +78,16 @@ import { ref, watch } from 'vue'
 import { showPrompt, toast } from '~/composables/util'
 import { renameImage, deleteImage } from '~/api/image'
 import UploadFile from '~/components/UploadFile.vue'
+
+defineProps({
+  showCheckbox: {
+    type: Boolean,
+    default: false
+  },
+  url: {
+    type: String
+  }
+})
 
 const loading = ref(false)
 // 数据数量
@@ -84,7 +105,11 @@ async function getData () {
   try {
     loading.value = true
     const res = await getImageList(image_class_id.value, currentPage.value)
-    list.value = res.list || []
+    list.value =
+      res.list.map(o => {
+        o.checked = false
+        return o
+      }) || []
     total.value = res.totalCount
   } finally {
     loading.value = false
@@ -132,6 +157,18 @@ const uploadDone = () => {
   getData()
 }
 
+const emit = defineEmits(['update:url'])
+
+const handleChooseChange = item => {
+
+  if (item.checked) {
+    list.value.forEach(i => {
+      i.checked = false
+    })
+    item.checked = true
+    emit('update:url', item.url)
+  }
+}
 
 defineExpose({
   loadData,

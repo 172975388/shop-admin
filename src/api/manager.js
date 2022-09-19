@@ -29,3 +29,44 @@ export function updatePassword (data) {
     data
   })
 }
+
+export function getManagerList (page, params) {
+  return axios({
+    url: `admin/manager/${page}`,
+    method: 'get',
+    params
+  })
+}
+
+export function updateManagerStatus (id, status) {
+  return axios({
+    url: `admin/manager/${id}/update_status`,
+    method: 'post',
+    params: {
+      status
+    }
+  })
+}
+
+export function createManager (data) {
+  return axios({
+    url: '/admin/manager',
+    method: 'post',
+    data
+  })
+}
+
+export function updateManager (id, data) {
+  return axios({
+    url: `admin/manager/${id}`,
+    method: 'post',
+    data
+  })
+}
+
+export function deleteManager (id) {
+  return axios({
+    url: `admin/manager/${id}/delete`,
+    method: 'post'
+  })
+}

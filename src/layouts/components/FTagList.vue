@@ -47,7 +47,7 @@ const { activeTab, tabList, changeTab, removeTab, handleClose } = useTabList()
 
 <style lang="scss" scoped>
 .f-tag-list {
-  @apply fixed top-64px right-0 h-44px bg-gray-100 flex items-center justify-between px-2 z-100;
+  @apply fixed top-64px right-0 h-44px bg-gray-100 flex items-center justify-between px-2 z-1000;
   .tag-btn {
     @apply bg-white rounded flex items-center mr-2;
     .el-dropdown-link {
