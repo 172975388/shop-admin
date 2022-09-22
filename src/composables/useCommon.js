@@ -84,6 +84,35 @@ export function useInitTable (opt = {}) {
     }
   }
 
+  // 多选删除
+  const multipleTableRef = ref(null)
+  const multiSelectionIds = ref([])
+  const selectionDisabled = ref(true)
+
+  const handleSelectionChange = e => {
+    multiSelectionIds.value = e.map(o => o.id)
+    if (multiSelectionIds.value.length === 0) {
+      selectionDisabled.value = true
+    } else {
+      selectionDisabled.value = false
+    }
+  }
+
+  const handleMultiDelete = () => {
+    loading.value = true
+    opt.delete(multiSelectionIds.value)
+      .then(() => {
+        toast('删除成功')
+        try {
+          multipleTableRef.value.clearSelection()
+          getData()
+        } catch {}
+      })
+      .finally(() => {
+        loading.value = false
+      })
+  }
+
   return {
     searchForm,
     resetSearchForm,
@@ -94,7 +123,11 @@ export function useInitTable (opt = {}) {
     limit,
     getData,
     handleStatusChange,
-    handleDelete
+    handleDelete,
+    handleSelectionChange,
+    multipleTableRef,
+    handleMultiDelete,
+    selectionDisabled
   }
 }
 
@@ -120,10 +153,10 @@ export function useInitForm (opt = {}) {
   const handleCreate = () => {
     drawerTitle.value = '新增'
     updateId.value = 0
-    if (ruleFormRef.value.clearValidate) {
-      // 清除验证
+    // clearValidate form组件的方法。
+    try {
       ruleFormRef.value.clearValidate()
-    }
+    } catch {}
     resetSearchForm(opt.ruleForm)
     formDrawerRef.value.open()
   }
@@ -132,10 +165,9 @@ export function useInitForm (opt = {}) {
   const handleUpdate = async row => {
     drawerTitle.value = '修改'
     updateId.value = row.id
-    if (ruleFormRef.value.clearValidate) {
-      // 清除验证
+    try {
       ruleFormRef.value.clearValidate()
-    }
+    } catch {}
     resetSearchForm(row)
     formDrawerRef.value.open()
   }
